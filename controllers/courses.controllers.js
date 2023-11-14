@@ -3,19 +3,26 @@ const model = require('../models/courses.models');
 
 
 function postCourses(req, res) {
-  if (!req.body.name) {
-    return res.status(400).json({
-      error: 'Missing course name'
-    });
+  try {
+    if (!req.body.course) {
+      return res.status(400).json({
+        error: 'Missing course name'
+      });
+    }
+  
+    const newCourse = {
+      name: req.body.course,
+      id: 100+ model.length,
+    };
+    model.push(newCourse);
+  
+    res.status(200).json(newCourse);
+  } catch (error) {
+    console.log('Server crashed')
+    return res.json({
+        error: 'Server is down'
+    })
   }
-
-  const newCourse = {
-    name: req.body.name,
-    id: model.length,
-  };
-  model.push(newCourse);
-
-  res.json(newCourse);
 }
 
 function getCourse (request, response){
